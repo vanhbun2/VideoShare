@@ -428,13 +428,13 @@ function createVideoCard(video)
     image.alt = video.title || "Video thumbnail";
     image.loading = "lazy";
 
-    if (video.thumbnail)
-    {
-        image.src = video.thumbnail;
-    }
-    else if (video.thumbnailUrl)
+    if (video.thumbnailUrl)
     {
         image.src = video.thumbnailUrl;
+    }
+    else if (video.thumbnail instanceof Blob)
+    {
+        image.src = URL.createObjectURL(video.thumbnail);
     }
     else
     {
