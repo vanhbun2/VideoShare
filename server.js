@@ -16,11 +16,10 @@ const PORT = Number(process.env.PORT) || 3000;
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const MAX_VIDEO_SIZE = 500 * 1024 * 1024;
 const ROOT = __dirname;
-const PUBLIC_DIR = path.join(ROOT, "public");
+const PUBLIC_DIR = ROOT;
 const UPLOAD_DIR = path.join(ROOT, "uploads");
 const DATA_DIR = path.join(ROOT, "data");
 const DATABASE_FILE = path.join(DATA_DIR, "videos.json");
-
 const VIDEO_EXTENSIONS = new Set([
     ".mp4",
     ".webm",
