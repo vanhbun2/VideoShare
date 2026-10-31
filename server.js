@@ -556,7 +556,7 @@ app.get("/auth/logout", (req, res, next) =>
         res.clearCookie("videoshare.sid", {
             httpOnly: true,
             secure: IS_PRODUCTION,
-            sameSite: "lax
+            sameSite: "lax"
         });
 
         res.redirect("/");
