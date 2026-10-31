@@ -1,1 +1,195 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b0b12">
+<title>VideoShare</title>
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<div id="page-entry" class="page active">
+    <div class="entry-box">
+        <div class="entry-logo">🎬 Video<span>Share</span></div>
+        <p class="entry-sub" data-i18n="entrySub">Chia sẻ video cùng mọi người</p>
+        <a class="btn-discord-server" href="https://discord.gg/me4yJZc9jg" target="_blank" rel="noopener">
+            <span>🎮</span>
+            <span data-i18n="joinServer">Tham gia Discord Server</span>
+        </a>
+        <div class="entry-tabs">
+            <button class="entry-tab discord-tab active" data-tab="discord">Discord</button>
+            <button class="entry-tab" data-tab="guest" data-i18n="guestTab">Khách</button>
+        </div>
+        <div class="entry-panel active" id="panel-discord">
+            <div class="discord-info">
+                <div class="discord-icon">🎮</div>
+                <h2 data-i18n="discordTitle">Đăng nhập bằng Discord</h2>
+                <p data-i18n="discordDescription">Sử dụng tài khoản Discord để đăng nhập an toàn vào VideoShare.</p>
+            </div>
+            <a class="btn-entry discord-btn" id="btn-discord-login" href="/auth/discord">
+                <span>🎮</span>
+                <span data-i18n="joinDiscord">Đăng nhập với Discord</span>
+            </a>
+            <p class="security-note" data-i18n="discordNote">Bạn sẽ được chuyển đến Discord để xác nhận đăng nhập.</p>
+        </div>
+        <div class="entry-panel" id="panel-guest">
+            <div>
+                <div class="field-label" data-i18n="customName">Tên hiển thị</div>
+                <input type="text" id="guest-name" maxlength="24" placeholder="Nhập tên của bạn">
+            </div>
+            <button class="btn-entry accent-btn" id="btn-guest-join" data-i18n="joinCustom">Vào ngay</button>
+            <p class="security-note" data-i18n="guestNote">Chế độ khách có thể bị giới hạn một số chức năng.</p>
+        </div>
+    </div>
+</div>
 
+<div id="page-app" class="page">
+    <nav>
+        <a class="nav-logo" href="#">🎬 Video<span>Share</span></a>
+        <div class="nav-right">
+            <button class="btn-upload-nav" id="btn-open-upload" data-i18n="uploadBtn">＋ Đăng video</button>
+            <div class="nav-avatar-wrap">
+                <button class="avatar-button" id="btn-avatar-menu" aria-label="Mở menu tài khoản">
+                    <img class="nav-avatar" id="nav-avatar" src="" alt="Avatar">
+                </button>
+                <div class="dropdown" id="dropdown">
+                    <div class="dd-user">
+                        <div class="dd-name" id="dd-name"></div>
+                        <div class="dd-tag" id="dd-tag"></div>
+                    </div>
+                    <div class="dd-sep"></div>
+                    <div class="dd-toggle-row">
+                        <span class="dd-toggle-label">🌙 <span data-i18n="darkMode">Chế độ tối</span></span>
+                        <button class="toggle on" id="theme-toggle" aria-label="Đổi giao diện"></button>
+                    </div>
+                    <div class="dd-toggle-row">
+                        <span class="dd-toggle-label">🌐 <span data-i18n="language">Ngôn ngữ</span></span>
+                        <div class="lang-switch">
+                            <button class="lang-btn active" data-lang="vi">VI</button>
+                            <button class="lang-btn" data-lang="en">EN</button>
+                        </div>
+                    </div>
+                    <div class="dd-sep"></div>
+                    <button class="dd-btn" id="btn-profile">✏️ <span data-i18n="editProfile">Chỉnh sửa hồ sơ</span></button>
+                    <button class="dd-btn danger" id="btn-logout">🚪 <span data-i18n="logout">Đăng xuất</span></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <section class="welcome-section">
+            <div>
+                <p class="welcome-label" data-i18n="welcomeLabel">KHÔNG GIAN CHIA SẺ VIDEO</p>
+                <h1><span data-i18n="welcome">Chào mừng đến với</span> <span class="gradient-text">VideoShare</span></h1>
+                <p data-i18n="welcomeDescription">Tải lên, lưu trữ và chia sẻ những video thú vị.</p>
+            </div>
+        </section>
+
+        <section class="toolbar">
+            <div class="search-box">
+                <span>🔎</span>
+                <input type="search" id="video-search" data-i18n-placeholder="searchPlaceholder" placeholder="Tìm kiếm video...">
+            </div>
+            <select id="video-sort" aria-label="Sắp xếp video">
+                <option value="newest" data-i18n="sortNewest">Mới nhất</option>
+                <option value="oldest" data-i18n="sortOldest">Cũ nhất</option>
+                <option value="name" data-i18n="sortName">Tên A-Z</option>
+                <option value="largest" data-i18n="sortLargest">Dung lượng lớn nhất</option>
+            </select>
+        </section>
+
+        <section class="upload-section" id="upload-section" hidden>
+            <div class="upload-heading">
+                <div>
+                    <p class="section-eyebrow" data-i18n="uploadEyebrow">THƯ VIỆN CỦA BẠN</p>
+                    <h2 data-i18n="uploadTitle">📤 Đăng video mới</h2>
+                </div>
+                <button class="icon-button" id="btn-close-upload" aria-label="Đóng">✕</button>
+            </div>
+            <div class="drop-zone" id="drop-zone">
+                <input type="file" id="file-input" accept="video/mp4,video/webm,video/quicktime,video/x-matroska,video/x-msvideo" multiple>
+                <div class="drop-icon">🎬</div>
+                <h3 data-i18n="dropTitle">Kéo và thả video vào đây</h3>
+                <p data-i18n="dropSub">Hoặc nhấn để chọn video từ máy tính</p>
+                <span class="formats">MP4 · WEBM · MOV · MKV · AVI</span>
+            </div>
+            <div class="upload-progress" id="upload-progress" hidden>
+                <div class="progress-track">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <p id="progress-text"></p>
+            </div>
+        </section>
+
+        <section class="library-section">
+            <div class="section-heading">
+                <div>
+                    <p class="section-eyebrow" data-i18n="libraryEyebrow">KHÁM PHÁ NỘI DUNG</p>
+                    <h2>📼 <span data-i18n="library">Thư viện video</span> <span class="count" id="vid-count">0</span></h2>
+                </div>
+            </div>
+            <div class="grid" id="grid">
+                <div class="empty-state" id="empty-state">
+                    <div class="empty-icon">🗂️</div>
+                    <h3 data-i18n="emptyTitle">Chưa có video nào</h3>
+                    <p data-i18n="emptyLib">Hãy đăng video đầu tiên của bạn!</p>
+                    <button class="btn-empty-upload" id="btn-empty-upload" data-i18n="uploadFirst">Đăng video ngay</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div class="modal-overlay" id="video-modal" aria-hidden="true">
+    <div class="modal-box">
+        <div class="modal-hdr">
+            <div>
+                <p class="section-eyebrow" data-i18n="playingNow">ĐANG PHÁT</p>
+                <h2 id="modal-title"></h2>
+            </div>
+            <button class="modal-close" id="modal-close" aria-label="Đóng">✕</button>
+        </div>
+        <video id="modal-video" controls playsinline></video>
+        <div class="modal-meta" id="modal-meta"></div>
+    </div>
+</div>
+
+<div class="profile-modal" id="profile-modal" aria-hidden="true">
+    <div class="profile-box">
+        <div class="profile-heading">
+            <h2 data-i18n="editProfile">Chỉnh sửa hồ sơ</h2>
+            <button class="icon-button" id="btn-close-profile" aria-label="Đóng">✕</button>
+        </div>
+        <div class="avatar-picker">
+            <img class="avatar-preview" id="avatar-preview" src="" alt="Avatar">
+            <label class="avatar-overlay" for="avatar-file-input">✏️</label>
+            <input type="file" id="avatar-file-input" accept="image/png,image/jpeg,image/webp">
+        </div>
+        <div class="profile-fields">
+            <div>
+                <div class="field-label" data-i18n="customName">Tên hiển thị</div>
+                <input type="text" id="profile-name" maxlength="24">
+            </div>
+            <button class="btn-save" id="btn-save-profile" data-i18n="save">💾 Lưu thay đổi</button>
+            <button class="btn-cancel-p" id="btn-cancel-profile" data-i18n="cancel">Hủy</button>
+        </div>
+    </div>
+</div>
+
+<div class="confirm-modal" id="confirm-modal" aria-hidden="true">
+    <div class="confirm-box">
+        <div class="confirm-icon">🗑️</div>
+        <h2 data-i18n="confirmDeleteTitle">Xóa video?</h2>
+        <p data-i18n="confirmDeleteText">Bạn có chắc chắn muốn xóa video này không?</p>
+        <div class="confirm-actions">
+            <button class="btn-cancel-p" id="btn-cancel-delete" data-i18n="cancel">Hủy</button>
+            <button class="btn-delete-confirm" id="btn-confirm-delete" data-i18n="delete">Xóa</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
