@@ -576,7 +576,20 @@ app.use(
     })
 );
 
-app.use(express.static(PUBLIC_DIR));
+app.get("/", (req, res) =>
+{
+    res.sendFile(path.join(PUBLIC_DIR, "index.html"));
+});
+
+app.get("/styles.css", (req, res) =>
+{
+    res.sendFile(path.join(PUBLIC_DIR, "styles.css"));
+});
+
+app.get("/app.js", (req, res) =>
+{
+    res.sendFile(path.join(PUBLIC_DIR, "app.js"));
+});
 
 app.use((error, req, res, next) =>
 {
